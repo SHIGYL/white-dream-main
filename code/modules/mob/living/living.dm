@@ -196,13 +196,13 @@
 	if(len)
 		for(var/obj/item/I in held_items)
 			if(!holding.len)
-				holding += "They are holding \a [I]"
+				holding += "В руках держит \a [I]"
 			else if(held_items.Find(I) == len)
-				holding += ", and \a [I]."
+				holding += ", и \a [I]."
 			else
 				holding += ", \a [I]"
 	holding += "."
-	mob_details += "You can also see [src] on the photo[health < (maxHealth * 0.75) ? ", looking a bit hurt":""][holding ? ". [holding.Join("")]":"."]."
+	mob_details += "Вы также можете видеть [src] на фотографии[health < (maxHealth * 0.75) ? ", выглядит немного больно":""][holding ? ". [holding.Join("")]":"."]."
 	return mob_details.Join("")
 
 //Called when we bump onto an obj

@@ -2,9 +2,9 @@
 #define CAMERA_PICTURE_SIZE_HARD_LIMIT 21
 
 /obj/item/camera
-	name = "camera"
+	name = "Фотоаппарат моментальной печати" //Не уверен, что оно именно так переводится, но оно точно будет понятно
 	icon = 'icons/obj/items_and_weapons.dmi'
-	desc = "A polaroid camera."
+	desc = "Фотоаппарат POLAROID."
 	icon_state = "camera"
 	inhand_icon_state = "camera"
 	worn_icon_state = "camera"
@@ -51,15 +51,15 @@
 
 /obj/item/camera/examine(mob/user)
 	. = ..()
-	. += "<hr><span class='notice'>Alt-click to change its focusing, allowing you to set how big of an area it will capture.</span>"
+	. += "<hr><span class='notice'>Нажмите Alt+click для изменения фокусировки камеры, позволяя вам установить размер захватываемой области .</span>"
 
 /obj/item/camera/proc/adjust_zoom(mob/user)
-	var/desired_x = input(user, "How high do you want the camera to shoot, between [picture_size_x_min] and [picture_size_x_max]?", "Zoom", picture_size_x) as num|null
+	var/desired_x = input(user, "Установка новой ширины для фотографии: от [picture_size_x_min] до [picture_size_x_max]?", "Zoom", picture_size_x) as num|null
 
 	if (isnull(desired_x))
 		return
 
-	var/desired_y = input(user, "How wide do you want the camera to shoot, between [picture_size_y_min] and [picture_size_y_max]?", "Zoom", picture_size_y) as num|null
+	var/desired_y = input(user, "Установка новой высоты для фотографии: от [picture_size_y_min] до [picture_size_y_max]?", "Zoom", picture_size_y) as num|null
 
 	if (isnull(desired_y))
 		return
@@ -100,7 +100,7 @@
 
 /obj/item/camera/examine(mob/user)
 	. = ..()
-	. += "\nIt has [pictures_left] photos left."
+	. += "\nВ кассете осталось [pictures_left] фотографий."
 
 //user can be atom or mob
 /obj/item/camera/proc/can_target(atom/target, mob/user, prox_flag)
@@ -173,7 +173,7 @@
 		return FALSE
 	size_x = clamp(size_x, 0, CAMERA_PICTURE_SIZE_HARD_LIMIT)
 	size_y = clamp(size_y, 0, CAMERA_PICTURE_SIZE_HARD_LIMIT)
-	var/list/desc = list("This is a photo of an area of [size_x+1] meters by [size_y+1] meters.")
+	var/list/desc = list("Фотография размера [size_x+1]x[size_y+1].")
 	var/list/mobs_spotted = list()
 	var/list/dead_spotted = list()
 	var/ai_user = isAI(user)
@@ -212,7 +212,7 @@
 	qdel(clone_area)
 	get_icon.Blend("#000", ICON_UNDERLAY)
 
-	var/datum/picture/P = new("picture", desc.Join(" "), mobs_spotted, dead_spotted, get_icon, null, psize_x, psize_y, blueprints)
+	var/datum/picture/P = new("Изображение", desc.Join(" "), mobs_spotted, dead_spotted, get_icon, null, psize_x, psize_y, blueprints)
 	after_picture(user, P, flag)
 	blending = FALSE
 
@@ -229,14 +229,14 @@
 	if(in_range(src, user)) //needed because of TK
 		user.put_in_hands(p)
 		pictures_left--
-		to_chat(user, "<span class='notice'>[pictures_left] photos left.</span>")
-		var/customise = "No"
+		to_chat(user, "<span class='notice'>Осталось [pictures_left] фотографий.</span>")
+		var/customise = "Нет"
 		if(can_customise)
-			customise = alert(user, "Do you want to customize the photo?", "Customization", "Yes", "No")
-		if(customise == "Yes")
-			var/name1 = stripped_input(user, "Set a name for this photo, or leave blank. 32 characters max.", "Name", max_length = 32)
-			var/desc1 = stripped_input(user, "Set a description to add to photo, or leave blank. 128 characters max.", "Caption", max_length = 128)
-			var/caption = stripped_input(user, "Set a caption for this photo, or leave blank. 256 characters max.", "Caption", max_length = 256)
+			customise = alert(user, "Вы хотите редактировать фото?", "Кастомизация", "Да", "Нет")
+		if(customise == "Да")
+			var/name1 = stripped_input(user, "Укажите название фото или оставьте поле пустым. Максимум 32 символа.", "Название", max_length = 32)
+			var/desc1 = stripped_input(user, "Установите заголовок, чтобы добавить его к фотографии, или оставьте поле пустым. Максимум 128 символов.", "Заголовок", max_length = 128)
+			var/caption = stripped_input(user, "Установите описание для фотографии или оставьте поле пустым. Максимум 256 символов.", "Описание", max_length = 256)
 			if(name1)
 				picture.picture_name = name1
 			if(desc1)
